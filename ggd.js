@@ -113,89 +113,89 @@ ggd = {};
     		
     		
 			showModal: function(settings) {
-			var _settings = {
-				type: undefined,  //undefined, alert or confirm
-				msgContent: "",
-				msgTitle: "",
-				msgFooter: "",				
-				closeCallback: undefined,
-				showCallback: undefined
-			};
-			m.extend(_settings, settings);
-			
-			if(_settings.type === undefined || _settings.type == "alert") {
+				var _settings = {
+					type: undefined,  //undefined, alert or confirm
+					msgContent: "",
+					msgTitle: "",
+					msgFooter: "",				
+					closeCallback: undefined,
+					showCallback: undefined
+				};
+				$.extend(_settings, settings);
 				
-				if(m.message.displayModel !== "dialog") {
-					alert(_settings.msgContent);
-					if(_settings.closeCallback !== undefined) {
-						console.log("do close call back");
-						_settings.closeCallback();
-					}
-				}
-				else {
-					m("#msgModal").remove();
-					var res = '<div id="msgModal" tabindex="-1" class="modal" role="dialog" data-backdrop="static"><div class="vertical-alignment-helper"><div class="modal-dialog vertical-align-center"><div class="modal-content"><div class="modal-header" data-dismiss="modal"><h4 class="modal-title">$MSG_TITLE</h4></div><div class="modal-body"><p>$MSG_CONTENT</p></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">關閉</button></div></div></div></div></div>';
-					res = res.replace("$MSG_TITLE", _settings.msgTitle);
-					res = res.replace("$MSG_CONTENT", _settings.msgContent);
-					m("body").append(res);
+				if(_settings.type === undefined || _settings.type == "alert") {
 					
-					m("#msgModal").modal({show: true});
-					m("#msgModal").on("shown.bs.modal", function() {						
-						if(_settings.showCallback !== undefined) {
-							_settings.showCallback();
-						}
-					});
-					
-					m("#msgModal").on("hidden.bs.modal", function() {
+					if(m.message.displayModel !== "dialog") {
+						alert(_settings.msgContent);
 						if(_settings.closeCallback !== undefined) {
 							console.log("do close call back");
 							_settings.closeCallback();
-						}
-						console.log("remove msg modal");
-						m("#msgModal").remove();
-					});
-				}							
-			}
-			else if(_settings.type == "confirm") {
-				
-				if(m.message.displayModel !== "dialog") {
-					
-					if(confirm(_settings.msgContent)) {
-						if(_settings.showCallback !== undefined) {
-							_settings.showCallback();
 						}
 					}
 					else {
-						if(_settings.closeCallback !== undefined) {
-							_settings.closeCallback();
-						}
-					}										
+						$("#msgModal").remove();
+						var res = '<div id="msgModal" tabindex="-1" class="modal" role="dialog" data-backdrop="static"><div class="vertical-alignment-helper"><div class="modal-dialog vertical-align-center"><div class="modal-content"><div class="modal-header" data-dismiss="modal"><h4 class="modal-title">$MSG_TITLE</h4></div><div class="modal-body"><p>$MSG_CONTENT</p></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">關閉</button></div></div></div></div></div>';
+						res = res.replace("$MSG_TITLE", _settings.msgTitle);
+						res = res.replace("$MSG_CONTENT", _settings.msgContent);
+						$("body").append(res);
+						
+						$("#msgModal").modal({show: true});
+						$("#msgModal").on("shown.bs.modal", function() {						
+							if(_settings.showCallback !== undefined) {
+								_settings.showCallback();
+							}
+						});
+						
+						$("#msgModal").on("hidden.bs.modal", function() {
+							if(_settings.closeCallback !== undefined) {
+								console.log("do close call back");
+								_settings.closeCallback();
+							}
+							console.log("remove msg modal");
+							$("#msgModal").remove();
+						});
+					}							
 				}
-				else {
-					var res = '<div class="modal" tabindex="-1" role="dialog" id="confirmModal" data-backdrop="static"><div class="vertical-alignment-helper"><div class="modal-dialog vertical-align-center"><div class="modal-content"><div class="modal-header" data-dismiss="modal"><h4 class="modal-title">$MSG_TITLE</h4></div><div class="modal-body"><p>$MSG_CONTENT</p></div><div class="modal-footer"><button type="button" class="btn btn-default" id="close" data-dismiss="modal">取消</button><button type="button" class="btn btn-primary" id="ok">確定</button></div></div></div></div></div>';
-					m("#confirmModal").remove();				
-					res = res.replace("$MSG_TITLE", _settings.msgTitle);
-					res = res.replace("$MSG_CONTENT", _settings.msgContent);
-					m("body").append(res);
+				else if(_settings.type == "confirm") {
 					
-					m("#confirmModal").modal({show: true});
-					m("#confirmModal #ok").on("click", function() {
-						m("#confirmModal").modal("hide");
-						if(_settings.showCallback !== undefined) {
-							_settings.showCallback();
+					if(m.message.displayModel !== "dialog") {
+						
+						if(confir$(_settings.msgContent)) {
+							if(_settings.showCallback !== undefined) {
+								_settings.showCallback();
+							}
 						}
-					});
-					
-					m("#confirmModal button[data-dismiss='modal']").on("click", function() {
-						m("#confirmModal").modal("hide");
-						if(_settings.closeCallback !== undefined) {
-							console.log("do close call back");
-							_settings.closeCallback();
-						}
-					});
-				}
-			}			
-		}
+						else {
+							if(_settings.closeCallback !== undefined) {
+								_settings.closeCallback();
+							}
+						}										
+					}
+					else {
+						var res = '<div class="modal" tabindex="-1" role="dialog" id="confirmModal" data-backdrop="static"><div class="vertical-alignment-helper"><div class="modal-dialog vertical-align-center"><div class="modal-content"><div class="modal-header" data-dismiss="modal"><h4 class="modal-title">$MSG_TITLE</h4></div><div class="modal-body"><p>$MSG_CONTENT</p></div><div class="modal-footer"><button type="button" class="btn btn-default" id="close" data-dismiss="modal">取消</button><button type="button" class="btn btn-primary" id="ok">確定</button></div></div></div></div></div>';
+						$("#confirmModal").remove();				
+						res = res.replace("$MSG_TITLE", _settings.msgTitle);
+						res = res.replace("$MSG_CONTENT", _settings.msgContent);
+						$("body").append(res);
+						
+						$("#confirmModal").modal({show: true});
+						$("#confirmModal #ok").on("click", function() {
+							$("#confirmModal").modal("hide");
+							if(_settings.showCallback !== undefined) {
+								_settings.showCallback();
+							}
+						});
+						
+						$("#confirmModal button[data-dismiss='modal']").on("click", function() {
+							$("#confirmModal").modal("hide");
+							if(_settings.closeCallback !== undefined) {
+								console.log("do close call back");
+								_settings.closeCallback();
+							}
+						});
+					}
+				}			
+			}
 		
 	};
 
