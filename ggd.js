@@ -468,6 +468,37 @@ ggd = {};
         checkIntegerNumber: function(tel) {
             var reg = /^\d+$/;
             return reg.test(tel);
+        },
+        
+        /**
+         * 預覽上傳圖檔
+         */
+        previewFileUploadIMG: function(settings) {
+        	var _settings = {
+        		targetFile: undefined,
+        		targetImg: undefined,
+        		callback: undefined
+        	};
+        	$.extend(_settings, settings);
+        	
+        	$(_settings.targetFile).on("change", function() {
+        		var file = this.files[0];
+        		if (!/\/(?:jpeg|jpg|png)/i.test(file.type)) {
+        			alert("上傳檔案類型有誤");
+        		}
+        		else {
+        			var reader = new FileReader();
+        			var base64 = "";
+        			reader.onload = function() {
+        				var result = this.result;
+        				base64 = result.split(",")[1];
+        				$(_settings.targetImg).attr("src", result);
+        				$(_settings.targetFile).val("");
+        			};
+        			reader.readAsDataURL(file);
+        			if(typeof(_settings.callback) == "function") _settings.callback(base64);
+        		}
+        	});
         }
     };
 })(ggd);
