@@ -477,28 +477,32 @@ ggd = {};
         	var _settings = {
         		targetFile: undefined,
         		targetImg: undefined,
+        		imgSrc: undefined,
         		callback: undefined
         	};
         	$.extend(_settings, settings);
+        	if(_settings.targetFile !== undefined) {
+        		$(_settings.targetFile).on("change", function() {
+            		var file = this.files[0];
+            		if (!/\/(?:jpeg|jpg|png)/i.test(file.type)) {
+            			alert("上傳檔案類型有誤");
+            		}
+            		else {
+            			var reader = new FileReader();            			
+            			reader.onload = function() {
+            				var result = this.result;            				
+            				$(_settings.targetImg).attr("src", result);
+            				$(_settings.targetFile).val("");
+            				if(typeof(_settings.callback) == "function") _settings.callback(result);
+            			};
+            			reader.readAsDataURL(file);            			
+            		}
+            	});
+        	}
         	
-        	$(_settings.targetFile).on("change", function() {
-        		var file = this.files[0];
-        		if (!/\/(?:jpeg|jpg|png)/i.test(file.type)) {
-        			alert("上傳檔案類型有誤");
-        		}
-        		else {
-        			var reader = new FileReader();
-        			var base64 = "";
-        			reader.onload = function() {
-        				var result = this.result;
-        				base64 = result.split(",")[1];
-        				$(_settings.targetImg).attr("src", result);
-        				$(_settings.targetFile).val("");
-        			};
-        			reader.readAsDataURL(file);
-        			if(typeof(_settings.callback) == "function") _settings.callback(base64);
-        		}
-        	});
+        	if(_settings.targetImg !== undefined && !ggd.util.isEmpty(_settings.imgSrc)) {
+        		$(_settings.targetImg).attr("src", _settings.imgSrc);
+        	}
         }
     };
 })(ggd);
